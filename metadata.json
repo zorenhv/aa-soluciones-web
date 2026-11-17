@@ -1,0 +1,6 @@
+{
+  "name": "AA Soluciones",
+  "description": "Ingeniería de software a medida, páginas web, CRMs, automatización en la nube, inteligencia artificial, machine learning y modelos matemáticos para la gestión de procesos empresariales.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
