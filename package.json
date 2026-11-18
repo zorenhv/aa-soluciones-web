@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "clean": "rm -rf dist .svelte-kit",
     "lint": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "deploy": "bun run build && bunx gh-pages -d dist -t true"
+    "deploy": "bun run build && bunx gh-pages -d build -t true"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
