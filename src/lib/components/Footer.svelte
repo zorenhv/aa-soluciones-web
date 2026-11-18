@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CONTACT_CONFIG } from '$lib/data/solutions';
-	import logoImg from '../../assets/logo_aa_transparent.png';
+	import logoImg from '../../assets/logo_aa_header.png?inline';
 </script>
 
 <footer class="border-t border-[#1F1E2E] bg-[#08080D] py-12">
@@ -11,10 +11,7 @@
 					<img
 						src={logoImg}
 						alt="Logo AA Soluciones"
-						width="53"
-						height="44"
-						referrerpolicy="no-referrer"
-						class="block h-11 w-[53px] shrink-0 object-contain"
+						class="h-11 w-auto shrink-0 object-contain"
 					/>
 					<span>AA Soluciones</span>
 				</a>

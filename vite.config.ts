@@ -28,8 +28,8 @@ export default defineConfig({
 			adapter: adapter({
 				fallback: '404.html'
       }),
-      paths: {
-        base: process.argv.includes('dev') ? '' : '/aa-soluciones-web'
+			paths: {
+				base: ''
 			}
 		}),
 		// Copies src/assets into dist/ so root-relative URLs like

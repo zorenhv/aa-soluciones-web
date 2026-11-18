@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logoImg from '../../assets/logo_aa_transparent.png';
+	import logoImg from '../../assets/logo_aa_header.png?inline';
 
 	let mobileOpen = $state(false);
 
@@ -25,10 +25,7 @@
 			<img
 				src={logoImg}
 				alt="Logo AA Soluciones"
-				width="53"
-				height="44"
-				referrerpolicy="no-referrer"
-				class="block h-11 w-[53px] shrink-0 object-contain"
+				class="h-11 w-auto shrink-0 object-contain"
 			/>
 			<span>AA Soluciones</span>
 		</a>
