@@ -54,10 +54,10 @@ export interface CaseStudy {
 }
 
 export const CONTACT_CONFIG = {
-	email: 'contacto@aasoluciones.com',
-	whatsappDisplay: '+52 55 4892 1740',
-	whatsappNumber: '525548921740',
-	location: 'Ciudad de México · Atención presencial y remota para empresas'
+	email: 'aa.soluciones.empresariales@gmail.com',
+	whatsappDisplay: '+52 744 500 5199',
+	whatsappNumber: '527445005199',
+	location: 'Atención presencial y remota para empresas'
 };
 
 export const SERVICES: ServiceItem[] = [

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { SERVICES } from '$lib/data/solutions';
 	import AsciiArt from '$lib/components/AsciiArt.svelte';
+	import SvgExportModal from '$lib/components/SvgExportModal.svelte';
 
 	interface Props {
 		selectedServiceId: string;
@@ -8,19 +9,33 @@
 	}
 
 	let { selectedServiceId, onSelectService }: Props = $props();
+	let exportModalOpen = $state(false);
 </script>
 
 <section id="servicios" class="border-t border-[#1F1E2E] py-20 lg:py-24">
 	<div class="mx-auto max-w-7xl px-6">
-		<div class="max-w-2xl">
-			<p class="text-sm font-medium text-[#A970FF]">Servicios integrales</p>
-			<h2 class="mt-2 font-display text-3xl font-semibold tracking-tight text-[#F4F4F8] sm:text-4xl">
-				Todo lo que tu empresa necesita en tecnología, bajo un mismo techo
-			</h2>
-			<p class="mt-4 text-base leading-relaxed text-[#9897AB]">
-				Desde el software que impulsa tus ventas y tus modelos de análisis hasta los equipos,
-				redes y servidores que mantienen tu oficina trabajando sin pausas.
-			</p>
+		<div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+			<div class="max-w-2xl">
+				<p class="text-sm font-medium text-[#A970FF]">Servicios integrales</p>
+				<h2 class="mt-2 font-display text-3xl font-semibold tracking-tight text-[#F4F4F8] sm:text-4xl">
+					Todo lo que tu empresa necesita en tecnología, bajo un mismo techo
+				</h2>
+				<p class="mt-4 text-base leading-relaxed text-[#9897AB]">
+					Desde el software que impulsa tus ventas y tus modelos de análisis hasta los equipos,
+					redes y servidores que mantienen tu oficina trabajando sin pausas.
+				</p>
+			</div>
+
+			<button
+				type="button"
+				onclick={() => (exportModalOpen = true)}
+				class="inline-flex items-center gap-2 self-start rounded-lg border border-[#2B2A40] bg-[#12111A] px-4 py-2.5 text-xs font-semibold text-[#D6D5E3] transition-colors hover:border-[#8447C8] hover:text-white lg:self-auto whitespace-nowrap shrink-0"
+			>
+				<svg class="h-4 w-4 text-[#A970FF]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+				</svg>
+				<span>Descargar ilustraciones SVG</span>
+			</button>
 		</div>
 
 		<!-- Modular ASCII Service Grid inspired by fps.ms -->
@@ -72,4 +87,6 @@
 			{/each}
 		</div>
 	</div>
+
+	<SvgExportModal open={exportModalOpen} onClose={() => (exportModalOpen = false)} />
 </section>
