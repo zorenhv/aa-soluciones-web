@@ -11,8 +11,10 @@
 					<img
 						src={logoImg}
 						alt="Logo AA Soluciones"
+						width="53"
+						height="44"
 						referrerpolicy="no-referrer"
-						class="h-11 w-auto object-contain"
+						class="block h-11 w-[53px] shrink-0 object-contain"
 					/>
 					<span>AA Soluciones</span>
 				</a>
