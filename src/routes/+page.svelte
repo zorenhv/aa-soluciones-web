@@ -1,4 +1,5 @@
 <script lang="ts">
+	import GalaxyBackground from '$lib/components/GalaxyBackground.svelte';
 	import Header from '$lib/components/Header.svelte';
 	import AsciiArt from '$lib/components/AsciiArt.svelte';
 	import ServicesBento from '$lib/components/ServicesBento.svelte';
@@ -29,12 +30,14 @@
 	];
 </script>
 
-<div id="inicio" class="min-h-screen bg-[#0A0A0F] text-[#F4F4F8]">
+<GalaxyBackground />
+
+<div id="inicio" class="relative z-10 min-h-screen text-[#F4F4F8]">
 	<Header />
 
 	<main>
-		<!-- Clean Business-Friendly Hero with Live Animated ASCII Focal Visual -->
-		<section class="subtle-grid relative overflow-hidden py-16 lg:py-24">
+		<!-- Clean Business-Friendly Hero over Animated Dot-Matrix Galaxy -->
+		<section class="relative overflow-hidden py-16 lg:py-24">
 			<div
 				class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8447C8]/40 to-transparent"
 			></div>
@@ -71,7 +74,7 @@
 
 							<a
 								href="#servicios"
-								class="inline-flex items-center justify-center rounded-lg border border-[#252436] bg-[#12111A] px-5 py-3 text-sm font-medium text-[#D6D5E3] transition-colors hover:border-[#8447C8] hover:text-white whitespace-nowrap shrink-0"
+								class="inline-flex items-center justify-center rounded-lg border border-[#252436] bg-[#12111A]/85 px-5 py-3 text-sm font-medium text-[#D6D5E3] backdrop-blur-sm transition-colors hover:border-[#8447C8] hover:text-white whitespace-nowrap shrink-0"
 							>
 								Ver servicios
 							</a>
@@ -87,10 +90,10 @@
 						</div>
 					</div>
 
-					<!-- Right: Live Animated ASCII Sculpture (Non-Technical Visual Anchor) -->
+					<!-- Right: Live Animated Dot-Matrix Focal Visual -->
 					<div class="lg:col-span-6">
 						<div
-							class="flex min-h-[340px] items-center justify-center rounded-xl border border-[#222133] bg-[#111019]/90 p-6 sm:min-h-[400px] sm:p-8"
+							class="flex min-h-[340px] items-center justify-center rounded-xl border border-[#222133]/90 bg-[#111019]/70 p-6 backdrop-blur-sm sm:min-h-[400px] sm:p-8"
 						>
 							<AsciiArt variant="hero" class="text-[9.5px] sm:text-[12px] lg:text-[12.5px]" />
 						</div>
@@ -99,7 +102,7 @@
 
 				<!-- Full-width 4-column quantified capability strip below hero split -->
 				<div
-					class="mt-14 grid grid-cols-2 divide-y divide-[#1F1E2E] overflow-hidden rounded-xl border border-[#222133] bg-[#12111A] sm:divide-y-0 sm:divide-x lg:grid-cols-4"
+					class="mt-14 grid grid-cols-2 divide-y divide-[#1F1E2E] overflow-hidden rounded-xl border border-[#222133] bg-[#12111A]/85 backdrop-blur-sm sm:divide-y-0 sm:divide-x lg:grid-cols-4"
 				>
 					{#each heroStats as stat}
 						<div class="p-5 sm:p-6">

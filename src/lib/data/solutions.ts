@@ -34,7 +34,7 @@ export interface SimulatorScenario {
 	automationRate: number;
 	errorReduction: string;
 	solutionSummary: string;
-	hourlyRateUsd: number;
+	hourlyRateMxn: number;
 }
 
 export interface CaseStudy {
@@ -193,7 +193,7 @@ export const SIMULATOR_SCENARIOS: SimulatorScenario[] = [
 		automationRate: 0.62,
 		errorReduction: '78% menos omisiones en seguimiento comercial',
 		solutionSummary: 'CRM a medida conectado con WhatsApp, correo y alertas automáticas',
-		hourlyRateUsd: 24
+		hourlyRateMxn: 480
 	},
 	{
 		id: 'cloud-auto',
@@ -208,7 +208,7 @@ export const SIMULATOR_SCENARIOS: SimulatorScenario[] = [
 		automationRate: 0.76,
 		errorReduction: '92% menos errores de captura manual',
 		solutionSummary: 'Flujos automáticos en la nube conectados a tus hojas y sistemas actuales',
-		hourlyRateUsd: 26
+		hourlyRateMxn: 520
 	},
 	{
 		id: 'math-ml',
@@ -223,7 +223,7 @@ export const SIMULATOR_SCENARIOS: SimulatorScenario[] = [
 		automationRate: 0.7,
 		errorReduction: '14% a 22% ahorro en costos operativos e inventario',
 		solutionSummary: 'Modelos predictivos y optimización matemática con tablero gerencial',
-		hourlyRateUsd: 34
+		hourlyRateMxn: 680
 	},
 	{
 		id: 'infra-soporte',
@@ -238,7 +238,7 @@ export const SIMULATOR_SCENARIOS: SimulatorScenario[] = [
 		automationRate: 0.8,
 		errorReduction: '85% menos tiempo muerto por fallas de red o equipo',
 		solutionSummary: 'Red empresarial, servidores con respaldo automático y póliza preventiva',
-		hourlyRateUsd: 22
+		hourlyRateMxn: 440
 	}
 ];
 

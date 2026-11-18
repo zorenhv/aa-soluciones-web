@@ -27,8 +27,8 @@
 		Math.round(weeklyManualHours * 4.33 * scenario.automationRate)
 	);
 
-	const annualSavingsUsd = $derived(
-		Math.round(monthlyHoursSaved * 12 * scenario.hourlyRateUsd)
+	const annualSavingsMxn = $derived(
+		Math.round(monthlyHoursSaved * 12 * scenario.hourlyRateMxn)
 	);
 
 	const throughputFactor = $derived(
@@ -38,13 +38,13 @@
 	function formatCurrency(val: number): string {
 		return new Intl.NumberFormat('es-MX', {
 			style: 'currency',
-			currency: 'USD',
+			currency: 'MXN',
 			maximumFractionDigits: 0
 		}).format(val);
 	}
 
 	function sendToContact() {
-		const note = `Estimación del simulador (${scenario.label}): ${monthlyVolume.toLocaleString('es-MX')} ${scenario.volumeUnit}/mes y ${weeklyManualHours} h manuales/semana. Ahorro proyectado: ${monthlyHoursSaved} h/mes (${formatCurrency(annualSavingsUsd)} USD/año). Solución sugerida: ${scenario.solutionSummary}.`;
+		const note = `Estimación del simulador (${scenario.label}): ${monthlyVolume.toLocaleString('es-MX')} ${scenario.volumeUnit}/mes y ${weeklyManualHours} h manuales/semana. Ahorro proyectado: ${monthlyHoursSaved} h/mes (${formatCurrency(annualSavingsMxn)} MXN/año). Solución sugerida: ${scenario.solutionSummary}.`;
 		onApplyEstimate(scenario.serviceId, note);
 	}
 </script>
@@ -159,9 +159,9 @@
 						<div class="rounded-lg border border-[#222133] bg-[#0A0A0F] p-4">
 							<p class="text-xs text-[#9897AB]">Ahorro anual estimado</p>
 							<p class="mt-2 font-mono text-3xl font-semibold text-[#7D92FF] tabular-nums">
-								{formatCurrency(annualSavingsUsd)}
+								{formatCurrency(annualSavingsMxn)}
 							</p>
-							<p class="mt-1 text-xs text-[#6F6E85]">USD · referencia ${scenario.hourlyRateUsd} USD/h</p>
+							<p class="mt-1 text-xs text-[#6F6E85]">MXN · referencia {formatCurrency(scenario.hourlyRateMxn)} MXN/h</p>
 						</div>
 					</div>
 
@@ -186,7 +186,7 @@
 							onclick={sendToContact}
 							class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#3B52D4] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#4B63E6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8447C8] whitespace-nowrap shrink-0"
 						>
-							<span>Enviar estimación a contacto</span>
+							<span>Solicitar una cotización</span>
 							<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 								<path d="M5 12h14M13 6l6 6-6 6" />
 							</svg>
