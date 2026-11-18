@@ -85,15 +85,6 @@
 							<p><span class="font-medium text-[#D6D5E3]">Solución:</span> {study.solution}</p>
 						</div>
 					</div>
-
-					<blockquote class="mt-6 border-t border-[#222133] pt-5">
-						<p class="text-xs leading-relaxed text-[#C6C5D6]">“{study.quote}”</p>
-						<footer class="mt-3 text-xs text-[#9897AB]">
-							<span class="font-semibold text-[#F4F4F8]">{study.author}</span>
-							<span aria-hidden="true"> · </span>
-							<span>{study.role}, {study.company}</span>
-						</footer>
-					</blockquote>
 				</article>
 			{/each}
 		</div>

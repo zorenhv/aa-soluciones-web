@@ -47,10 +47,6 @@ export interface CaseStudy {
 	metricValue: string;
 	metricLabel: string;
 	secondaryMetric: string;
-	quote: string;
-	author: string;
-	role: string;
-	company: string;
 }
 
 export const CONTACT_CONFIG = {
@@ -258,12 +254,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 			'Creamos un sistema con modelo matemático de rutas conectado a su operación y un panel web sencillo para despacho diario.',
 		metricValue: '-18.4%',
 		metricLabel: 'Costo operativo de reparto en 90 días',
-		secondaryMetric: 'Planeación reducida de 4 h a 11 min diarios',
-		quote:
-			'Pasamos de planear rutas en hojas de cálculo a tener el plan óptimo cada mañana con un clic. El ahorro cubrió el proyecto en el primer trimestre.',
-		author: 'Ing. Ricardo Mendoza',
-		role: 'Director de Operaciones',
-		company: 'Grupo Distribuidor del Bajío'
+		secondaryMetric: 'Planeación reducida de 4 h a 11 min diarios'
 	},
 	{
 		id: 'fintech-crm',
@@ -276,12 +267,7 @@ export const CASE_STUDIES: CaseStudy[] = [
 			'Desarrollamos un CRM propio integrado con correo electrónico, WhatsApp y recordatorios automáticos para cada asesor.',
 		metricValue: '+42%',
 		metricLabel: 'Tasa de conversión de prospectos en 4 meses',
-		secondaryMetric: 'Primera respuesta reducida a menos de 6 min',
-		quote:
-			'AA Soluciones entendió nuestro negocio sin obligarnos a cambiar cómo vendemos. Hoy cada asesor tiene claridad total de su cartera.',
-		author: 'Lic. Valeria Castellanos',
-		role: 'Gerente Comercial',
-		company: 'Financiera Norteña Empresarial'
+		secondaryMetric: 'Primera respuesta reducida a menos de 6 min'
 	},
 	{
 		id: 'infraestructura-oficina',
@@ -294,11 +280,6 @@ export const CASE_STUDIES: CaseStudy[] = [
 			'Instalamos cableado estructurado con fibra, Wi-Fi empresarial sin zonas muertas, servidor con respaldos automáticos y PCs ensambladas a medida.',
 		metricValue: '99.9%',
 		metricLabel: 'Continuidad de red y operación diaria',
-		secondaryMetric: 'Respaldos automáticos verificados cada noche',
-		quote:
-			'Un solo proveedor resolvió nuestra red, servidores y equipos de ingeniería. Dejamos de perder horas productivas por fallas técnicas.',
-		author: 'Mtro. Héctor Villalobos',
-		role: 'Subdirector de Operaciones',
-		company: 'Industrias Metálicas Altiplano'
+		secondaryMetric: 'Respaldos automáticos verificados cada noche'
 	}
 ];
