@@ -26,12 +26,11 @@ export default defineConfig({
 				$lib: 'src/lib'
 			},
 			adapter: adapter({
-				pages: 'dist',
-				assets: 'dist',
-				fallback: 'index.html',
-				precompress: false,
-				strict: false
-			})
+				fallback: '404.html'
+      }),
+      paths: {
+        base: process.argv.includes('dev') ? '' : '/aa-soluciones-web'
+			}
 		}),
 		// Copies src/assets into dist/ so root-relative URLs like
 		// "/src/assets/images/..." (e.g. generate_image output) still resolve
