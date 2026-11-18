@@ -53,7 +53,8 @@ export const CONTACT_CONFIG = {
 	email: 'aa.soluciones.empresariales@gmail.com',
 	whatsappDisplay: '+52 744 500 5199',
 	whatsappNumber: '527445005199',
-	location: 'Atención presencial y remota para empresas'
+	location: 'Atención presencial y remota para empresas',
+	web3formsKey: '322769d6-9728-4fb8-aad7-c17a5030a274'
 };
 
 export const SERVICES: ServiceItem[] = [

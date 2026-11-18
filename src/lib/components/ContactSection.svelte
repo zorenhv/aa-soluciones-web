@@ -60,6 +60,12 @@
 		`https://wa.me/${CONTACT_CONFIG.whatsappNumber}?text=${encodeURIComponent(formattedSummary)}`
 	);
 
+	const mailtoHref = $derived(
+		`mailto:${CONTACT_CONFIG.email}?subject=${encodeURIComponent(
+			`Solicitud de cotización — ${selectedServiceLabel}`
+		)}&body=${encodeURIComponent(formattedSummary)}`
+	);
+
 	function validate(channel: 'email' | 'whatsapp'): boolean {
 		const nextErrors: Record<string, string> = {};
 
@@ -102,36 +108,37 @@
 
 		sending = true;
 		try {
-			const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_CONFIG.email}`, {
+			const formData = new FormData();
+			formData.append('access_key', CONTACT_CONFIG.web3formsKey);
+			formData.append('subject', `Nueva cotización (${ref}) — ${selectedServiceLabel}`);
+			formData.append('from_name', 'AA Soluciones Web');
+			formData.append('replyto', email.trim());
+			formData.append('Referencia', ref);
+			formData.append('Nombre', fullName.trim());
+			formData.append('Empresa', company.trim() || 'No especificada');
+			formData.append('Correo', email.trim());
+			formData.append('Telefono', phone.trim() || 'No proporcionado');
+			formData.append('Servicio', selectedServiceLabel);
+			formData.append('Presupuesto', budgetLabels[budget] ?? budget);
+			formData.append('Mensaje', message.trim());
+
+			const res = await fetch('https://api.web3forms.com/submit', {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
 					Accept: 'application/json'
 				},
-				body: JSON.stringify({
-					_subject: `Nueva cotización (${ref}) — ${selectedServiceLabel}`,
-					_replyto: email.trim(),
-					_template: 'table',
-					Referencia: ref,
-					Nombre: fullName.trim(),
-					Empresa: company.trim() || 'No especificada',
-					Correo: email.trim(),
-					Telefono: phone.trim() || 'No proporcionado',
-					Servicio: selectedServiceLabel,
-					Presupuesto: budgetLabels[budget] ?? budget,
-					Mensaje: message.trim()
-				})
+				body: formData
 			});
 
 			const data = await res.json().catch(() => null);
-			if (!res.ok || (data && data.success === 'false')) {
-				throw new Error(data?.message || 'No se pudo completar el envío automático.');
+			if (!res.ok || !data?.success) {
+				throw new Error(data?.message || `Error del servicio (${res.status}).`);
 			}
 
 			submittedChannel = 'email';
-		} catch {
-			sendError =
-				'No fue posible conectar con el servicio de envío en este momento. Puedes intentar de nuevo o enviarnos tu solicitud por WhatsApp.';
+		} catch (err) {
+			const detail = err instanceof Error && err.message ? ` (${err.message})` : '';
+			sendError = `No fue posible completar el envío automático${detail}. Puedes reintentar, enviarlo por WhatsApp o abrir tu correo.`;
 		} finally {
 			sending = false;
 		}
@@ -450,6 +457,12 @@
 								<div class="rounded-lg border border-red-500/40 bg-red-500/10 p-3.5 text-xs text-red-200">
 									<p>{sendError}</p>
 									<div class="mt-2 flex flex-wrap gap-3">
+										<a
+											href={mailtoHref}
+											class="font-semibold text-[#7D92FF] underline underline-offset-4 hover:text-white"
+										>
+											Abrir correo ({CONTACT_CONFIG.email})
+										</a>
 										<a
 											href={whatsappHref}
 											target="_blank"
