@@ -23,8 +23,12 @@
 		weeklyManualHours = next.defaultHours;
 	}
 
+	const volumeFactor = $derived(
+		0.65 + 0.35 * Math.pow(Math.max(1, monthlyVolume) / scenario.defaultVolume, 0.55)
+	);
+
 	const monthlyHoursSaved = $derived(
-		Math.round(weeklyManualHours * 4.33 * scenario.automationRate)
+		Math.round(weeklyManualHours * 4.33 * scenario.automationRate * volumeFactor)
 	);
 
 	const annualSavingsMxn = $derived(
@@ -32,7 +36,7 @@
 	);
 
 	const throughputFactor = $derived(
-		(1 / (1 - scenario.automationRate)).toFixed(1)
+		((1 / (1 - scenario.automationRate)) * (0.85 + 0.15 * Math.pow(Math.max(1, monthlyVolume) / scenario.defaultVolume, 0.4))).toFixed(1)
 	);
 
 	function formatCurrency(val: number): string {
