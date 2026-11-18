@@ -17,6 +17,8 @@
 	let message = $state('');
 
 	let errors = $state<Record<string, string>>({});
+	let sending = $state(false);
+	let sendError = $state('');
 	let submittedChannel = $state<'email' | 'whatsapp' | null>(null);
 	let referenceCode = $state('');
 	let copied = $state(false);
@@ -32,11 +34,11 @@
 	);
 
 	const budgetLabels: Record<string, string> = {
-		'under-10k': 'Menos de $10,000 USD',
-		'10k-25k': '$10,000 – $25,000 USD',
-		'25k-60k': '$25,000 – $60,000 USD',
-		'over-60k': 'Más de $60,000 USD',
-		'por-definir': 'Por definir en diagnóstico'
+		'por-definir': 'Por definir en diagnóstico',
+		'under-50k': 'Menos de $50,000 MXN',
+		'50k-150k': '$50,000 – $150,000 MXN',
+		'150k-400k': '$150,000 – $400,000 MXN',
+		'over-400k': 'Más de $400,000 MXN'
 	};
 
 	const formattedSummary = $derived(
@@ -56,12 +58,6 @@
 
 	const whatsappHref = $derived(
 		`https://wa.me/${CONTACT_CONFIG.whatsappNumber}?text=${encodeURIComponent(formattedSummary)}`
-	);
-
-	const mailtoHref = $derived(
-		`mailto:${CONTACT_CONFIG.email}?subject=${encodeURIComponent(
-			`Solicitud de cotización — ${selectedServiceLabel}`
-		)}&body=${encodeURIComponent(formattedSummary)}`
 	);
 
 	function validate(channel: 'email' | 'whatsapp'): boolean {
@@ -90,17 +86,60 @@
 		return Object.keys(nextErrors).length === 0;
 	}
 
-	function handleSubmit(e: SubmitEvent) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
+		sendError = '';
 		if (!validate(activeChannel)) return;
 
 		const rand = Math.floor(1000 + Math.random() * 9000);
-		referenceCode = `AA-${new Date().getFullYear()}-${rand}`;
-		submittedChannel = activeChannel;
+		const ref = `AA-${new Date().getFullYear()}-${rand}`;
+		referenceCode = ref;
+
+		if (activeChannel === 'whatsapp') {
+			submittedChannel = 'whatsapp';
+			return;
+		}
+
+		sending = true;
+		try {
+			const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_CONFIG.email}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json'
+				},
+				body: JSON.stringify({
+					_subject: `Nueva cotización (${ref}) — ${selectedServiceLabel}`,
+					_replyto: email.trim(),
+					_template: 'table',
+					Referencia: ref,
+					Nombre: fullName.trim(),
+					Empresa: company.trim() || 'No especificada',
+					Correo: email.trim(),
+					Telefono: phone.trim() || 'No proporcionado',
+					Servicio: selectedServiceLabel,
+					Presupuesto: budgetLabels[budget] ?? budget,
+					Mensaje: message.trim()
+				})
+			});
+
+			const data = await res.json().catch(() => null);
+			if (!res.ok || (data && data.success === 'false')) {
+				throw new Error(data?.message || 'No se pudo completar el envío automático.');
+			}
+
+			submittedChannel = 'email';
+		} catch {
+			sendError =
+				'No fue posible conectar con el servicio de envío en este momento. Puedes intentar de nuevo o enviarnos tu solicitud por WhatsApp.';
+		} finally {
+			sending = false;
+		}
 	}
 
 	function resetSubmission() {
 		submittedChannel = null;
+		sendError = '';
 		copied = false;
 	}
 
@@ -180,6 +219,7 @@
 							onclick={() => {
 								activeChannel = 'email';
 								errors = {};
+								sendError = '';
 								submittedChannel = null;
 							}}
 							class="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 {activeChannel ===
@@ -201,6 +241,7 @@
 							onclick={() => {
 								activeChannel = 'whatsapp';
 								errors = {};
+								sendError = '';
 								submittedChannel = null;
 							}}
 							class="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-xs font-semibold transition-colors whitespace-nowrap shrink-0 {activeChannel ===
@@ -223,13 +264,13 @@
 									<p class="font-mono text-xs text-[#A970FF]">Referencia {referenceCode}</p>
 									<h3 class="mt-1 font-display text-xl font-semibold text-[#F4F4F8]">
 										{submittedChannel === 'email'
-											? 'Solicitud lista para enviar por correo'
+											? '¡Solicitud enviada por correo!'
 											: 'Mensaje estructurado listo para WhatsApp'}
 									</h3>
 									<p class="mt-2 text-sm leading-relaxed text-[#9897AB]">
 										{#if submittedChannel === 'email'}
-											Hemos preparado el resumen de tu solicitud. Puedes abrir tu correo o enviarlo
-											también por WhatsApp con un clic.
+											Recibimos tu solicitud directamente en {CONTACT_CONFIG.email}. Nuestro equipo te
+											responderá en menos de 24 horas hábiles.
 										{:else}
 											Tu mensaje ya incluye todos los datos de tu solicitud. Haz clic en el botón para
 											iniciar la conversación directa con nuestro equipo en WhatsApp.
@@ -245,18 +286,12 @@
 							<div class="mt-5 flex flex-wrap items-center gap-3">
 								{#if submittedChannel === 'email'}
 									<a
-										href={mailtoHref}
-										class="inline-flex items-center gap-2 rounded-lg bg-[#3B52D4] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#4B63E6] whitespace-nowrap shrink-0"
-									>
-										<span>Abrir en cliente de correo</span>
-									</a>
-									<a
 										href={whatsappHref}
 										target="_blank"
 										rel="noopener noreferrer"
-										class="inline-flex items-center gap-2 rounded-lg border border-[#2D2B42] bg-[#161522] px-4 py-2.5 text-xs font-semibold text-[#F4F4F8] transition-colors hover:border-[#8447C8] whitespace-nowrap shrink-0"
+										class="inline-flex items-center gap-2 rounded-lg bg-[#8447C8] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#9558DB] whitespace-nowrap shrink-0"
 									>
-										<span>También enviar por WhatsApp</span>
+										<span>Dar seguimiento por WhatsApp</span>
 									</a>
 								{:else}
 									<a
@@ -266,12 +301,6 @@
 										class="inline-flex items-center gap-2 rounded-lg bg-[#8447C8] px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#9558DB] whitespace-nowrap shrink-0"
 									>
 										<span>Abrir chat en WhatsApp</span>
-									</a>
-									<a
-										href={mailtoHref}
-										class="inline-flex items-center gap-2 rounded-lg border border-[#2D2B42] bg-[#161522] px-4 py-2.5 text-xs font-semibold text-[#F4F4F8] transition-colors hover:border-[#3B52D4] whitespace-nowrap shrink-0"
-									>
-										<span>Enviar copia por correo</span>
 									</a>
 								{/if}
 
@@ -288,7 +317,7 @@
 									onclick={resetSubmission}
 									class="ml-auto text-xs font-medium text-[#9897AB] underline-offset-4 hover:text-white hover:underline"
 								>
-									Editar datos
+									Enviar otra solicitud
 								</button>
 							</div>
 						</div>
@@ -354,7 +383,7 @@
 										id="contact-phone"
 										type="tel"
 										bind:value={phone}
-										placeholder="+52 55 0000 0000"
+										placeholder="+52 744 000 0000"
 										class="mt-1.5 w-full rounded-lg border bg-[#0A0A0F] px-3.5 py-2.5 text-sm text-[#F4F4F8] placeholder:text-[#5B5A70] focus:border-[#8447C8] focus:outline-none {errors.phone
 											? 'border-red-500/80'
 											: 'border-[#252436]'}"
@@ -383,7 +412,7 @@
 
 								<div>
 									<label for="contact-budget" class="block text-xs font-medium text-[#C6C5D6]">
-										Presupuesto estimado
+										Presupuesto estimado (MXN)
 									</label>
 									<select
 										id="contact-budget"
@@ -391,10 +420,10 @@
 										class="mt-1.5 w-full rounded-lg border border-[#252436] bg-[#0A0A0F] px-3.5 py-2.5 text-sm text-[#F4F4F8] focus:border-[#8447C8] focus:outline-none"
 									>
 										<option value="por-definir">Por definir en diagnóstico</option>
-										<option value="under-10k">Menos de $10,000 USD</option>
-										<option value="10k-25k">$10,000 – $25,000 USD</option>
-										<option value="25k-60k">$25,000 – $60,000 USD</option>
-										<option value="over-60k">Más de $60,000 USD</option>
+										<option value="under-50k">Menos de $50,000 MXN</option>
+										<option value="50k-150k">$50,000 – $150,000 MXN</option>
+										<option value="150k-400k">$150,000 – $400,000 MXN</option>
+										<option value="over-400k">Más de $400,000 MXN</option>
 									</select>
 								</div>
 							</div>
@@ -417,6 +446,29 @@
 								{/if}
 							</div>
 
+							{#if sendError}
+								<div class="rounded-lg border border-red-500/40 bg-red-500/10 p-3.5 text-xs text-red-200">
+									<p>{sendError}</p>
+									<div class="mt-2 flex flex-wrap gap-3">
+										<a
+											href={whatsappHref}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="font-semibold text-[#C59BFF] underline underline-offset-4 hover:text-white"
+										>
+											Enviar por WhatsApp
+										</a>
+										<button
+											type="button"
+											onclick={copySummary}
+											class="font-semibold text-white underline underline-offset-4"
+										>
+											{copied ? 'Resumen copiado' : 'Copiar resumen'}
+										</button>
+									</div>
+								</div>
+							{/if}
+
 							{#if activeChannel === 'whatsapp'}
 								<div class="rounded-lg border border-[#222133] bg-[#0A0A0F] p-4">
 									<p class="text-xs font-medium text-[#9897AB]">Vista previa del mensaje de WhatsApp</p>
@@ -432,15 +484,20 @@
 								</p>
 								<button
 									type="submit"
-									class="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8447C8] whitespace-nowrap shrink-0 {activeChannel ===
+									disabled={sending}
+									class="inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8447C8] disabled:cursor-not-allowed disabled:opacity-60 whitespace-nowrap shrink-0 {activeChannel ===
 									'email'
 										? 'bg-[#3B52D4] hover:bg-[#4B63E6]'
 										: 'bg-[#8447C8] hover:bg-[#9558DB]'}"
 								>
 									<span>
-										{activeChannel === 'email'
-											? 'Preparar envío por correo'
-											: 'Preparar envío por WhatsApp'}
+										{#if sending}
+											Enviando solicitud...
+										{:else if activeChannel === 'email'}
+											Enviar solicitud por correo
+										{:else}
+											Preparar envío por WhatsApp
+										{/if}
 									</span>
 									<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 										<path d="M5 12h14M13 6l6 6-6 6" />
