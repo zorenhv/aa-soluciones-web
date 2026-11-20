@@ -7,7 +7,7 @@
 	<div class="mx-auto max-w-7xl px-6">
 		<div class="flex flex-col justify-between gap-8 md:flex-row md:items-center">
 			<div>
-				<a href="#inicio" class="inline-flex items-center gap-3 font-display text-lg font-bold tracking-tight text-[#F4F4F8]">
+				<a href="/#inicio" class="inline-flex items-center gap-3 font-display text-lg font-bold tracking-tight text-[#F4F4F8]">
 					<img
 						src={logoImg}
 						alt="Logo AA Soluciones"
@@ -22,10 +22,11 @@
 			</div>
 
 			<div class="flex flex-wrap items-center gap-6 text-xs font-medium text-[#9897AB]">
-				<a href="#servicios" class="transition-colors hover:text-[#F4F4F8]">Servicios</a>
-				<a href="#simulador" class="transition-colors hover:text-[#F4F4F8]">Simulador</a>
-				<a href="#casos" class="transition-colors hover:text-[#F4F4F8]">Casos</a>
-				<a href="#contacto" class="transition-colors hover:text-[#F4F4F8]">Contacto</a>
+				<a href="/#servicios" class="transition-colors hover:text-[#F4F4F8]">Servicios</a>
+				<a href="/#simulador" class="transition-colors hover:text-[#F4F4F8]">Simulador</a>
+				<a href="/#casos" class="transition-colors hover:text-[#F4F4F8]">Casos</a>
+				<a href="/#contacto" class="transition-colors hover:text-[#F4F4F8]">Contacto</a>
+				<a href="/aviso-de-privacidad" class="transition-colors hover:text-[#F4F4F8]">Aviso de privacidad</a>
 			</div>
 		</div>
 

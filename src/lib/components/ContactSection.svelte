@@ -15,6 +15,8 @@
 	let phone = $state('');
 	let budget = $state('por-definir');
 	let message = $state('');
+	let aceptaAviso = $state(false);
+	let aceptaMarketing = $state(false);
 
 	let errors = $state<Record<string, string>>({});
 	let sending = $state(false);
@@ -88,6 +90,10 @@
 			nextErrors.message = 'Cuéntenos brevemente qué necesita (mínimo 15 caracteres).';
 		}
 
+		if (!aceptaAviso) {
+			nextErrors.aceptaAviso = 'Debe aceptar el aviso de privacidad para continuar.';
+		}
+
 		errors = nextErrors;
 		return Object.keys(nextErrors).length === 0;
 	}
@@ -121,6 +127,8 @@
 			formData.append('Servicio', selectedServiceLabel);
 			formData.append('Presupuesto', budgetLabels[budget] ?? budget);
 			formData.append('Mensaje', message.trim());
+			formData.append('acepta_aviso', aceptaAviso ? 'Sí' : 'No');
+			formData.append('acepta_marketing', aceptaMarketing ? 'Sí' : 'No');
 
 			const res = await fetch('https://api.web3forms.com/submit', {
 				method: 'POST',
@@ -490,6 +498,46 @@
 									</p>
 								</div>
 							{/if}
+
+							<div class="space-y-3 pt-1">
+								<div>
+									<label class="flex items-start gap-3 text-xs leading-relaxed text-[#C6C5D6] cursor-pointer">
+										<input
+											type="checkbox"
+											name="acepta_aviso"
+											required
+											bind:checked={aceptaAviso}
+											class="mt-0.5 h-4 w-4 shrink-0 rounded border-[#252436] bg-[#0A0A0F] accent-[#8447C8]"
+										/>
+										<span>
+											He leído y acepto el
+											<a
+												href="/aviso-de-privacidad"
+												class="text-[#A970FF] underline underline-offset-4 transition-colors hover:text-[#C59BFF]"
+											>
+												aviso de privacidad
+											</a>
+											<span class="text-[#A970FF]">*</span>
+										</span>
+									</label>
+									{#if errors.aceptaAviso}
+										<p class="mt-1.5 pl-7 text-xs text-red-400">{errors.aceptaAviso}</p>
+									{/if}
+								</div>
+
+								<label class="flex items-start gap-3 text-xs leading-relaxed text-[#9897AB] cursor-pointer">
+									<input
+										type="checkbox"
+										name="acepta_marketing"
+										value="Sí"
+										bind:checked={aceptaMarketing}
+										class="mt-0.5 h-4 w-4 shrink-0 rounded border-[#252436] bg-[#0A0A0F] accent-[#3B52D4]"
+									/>
+									<span>
+										Autorizo que mis datos se usen para recibir información sobre servicios y novedades (opcional).
+									</span>
+								</label>
+							</div>
 
 							<div class="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
 								<p class="text-xs text-[#6F6E85]">

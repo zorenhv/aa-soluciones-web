@@ -4,10 +4,10 @@
 	let mobileOpen = $state(false);
 
 	const navItems = [
-		{ href: '#servicios', label: 'Servicios' },
-		{ href: '#simulador', label: 'Simulador' },
-		{ href: '#casos', label: 'Casos' },
-		{ href: '#contacto', label: 'Contacto' }
+		{ href: '/#servicios', label: 'Servicios' },
+		{ href: '/#simulador', label: 'Simulador' },
+		{ href: '/#casos', label: 'Casos' },
+		{ href: '/#contacto', label: 'Contacto' }
 	];
 
 	function closeMenu() {
@@ -19,7 +19,7 @@
 	<div class="mx-auto flex max-w-7xl items-center justify-between gap-8 px-6 py-3">
 		<!-- Zone 1: Company Logo + Clean Wordmark -->
 		<a
-			href="#inicio"
+			href="/#inicio"
 			class="flex items-center gap-3 font-display text-lg font-bold tracking-tight text-[#F4F4F8] transition-colors hover:text-[#B272FF] whitespace-nowrap shrink-0"
 		>
 			<img
@@ -45,7 +45,7 @@
 		<!-- Zone 3: Single primary action -->
 		<div class="flex items-center gap-3 shrink-0">
 			<a
-				href="#contacto"
+				href="/#contacto"
 				class="hidden sm:inline-flex items-center justify-center rounded-lg bg-[#3B52D4] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#4B63E6] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8447C8] whitespace-nowrap shrink-0"
 			>
 				Cotizar Proyecto
@@ -84,7 +84,7 @@
 					</a>
 				{/each}
 				<a
-					href="#contacto"
+					href="/#contacto"
 					onclick={closeMenu}
 					class="mt-2 inline-flex items-center justify-center rounded-lg bg-[#3B52D4] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#4B63E6]"
 				>
